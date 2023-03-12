@@ -7,15 +7,15 @@ const Login = () => {
         direction="column"
         bgColor="gray.600"
         px={32}
-				py={16}
+        py={16}
         borderRadius={8}
-				maxW="900px"
+        maxW="900px"
       >
         <Heading color="teal.400" textAlign="center" mb={8}>
           The Next
         </Heading>
         <Input placeholder="email@email.com" variant="filled" mb={4} />
-        <Input placeholder="*******" variant="filled" mb={12}  />
+        <Input placeholder="*******" variant="filled" mb={12} />
         <Button colorScheme="teal" mb={2}>
           Entrar
         </Button>
