@@ -25,7 +25,7 @@ import {
         h="120px"
         bgColor="teal.500"
       >
-        <Image boxSize="80px" src="/avatar.png" />
+        <Image boxSize="80px" src="/logoadm.png" />
         <Box display="flex" gap="40px" justifyContent="" color="white">
           <Text
             fontWeight={pageActive === "users" && "bold"}
