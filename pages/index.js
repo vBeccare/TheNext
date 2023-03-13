@@ -1,11 +1,9 @@
-import { Button, Flex, Heading, Image, Input } from "@chakra-ui/react";
+import { Button, Flex, Image, Input } from "@chakra-ui/react";
 
-import Router from "next/router";
+import useIndex from "./hooks/useIndex";
 
 const Login = () => {
-  const handleSignUp = () => {
-    Router.push("/usuarios");
-  };
+  const { handleChangeEmail, handleChangePassword, handleLogin } = useIndex();
   return (
     <Flex height="100vh" alignItems="center" justifyContent="center">
       <Flex
@@ -18,11 +16,20 @@ const Login = () => {
         maxW="900px"
       >
         <Image boxSize="160px" src="/logohome.png" />
-        <Input placeholder="email@email.com" variant="outline" mb={4} />
-        <Input placeholder="*******" variant="outline" mb={12} />
+        <Input
+          placeholder="email@email.com"
+          variant="outline"
+          mb={4}
+          onChange={handleChangeEmail}
+        />
+        <Input
+          placeholder="*******"
+          variant="outline"
+          mb={12}
+          onChange={handleChangePassword}
+        />
 
-
-        <Button colorScheme="teal" mb={2} onClick={() => handleSignUp()}>
+        <Button colorScheme="teal" mb={2} onClick={handleLogin}>
           Entrar
         </Button>
       </Flex>
