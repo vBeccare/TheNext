@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import Router from "next/router";
 import { useState } from "react";
+import { userLogin } from "../../services/users";
 
 const useIndex = () => {
   const [email, setEmail] = useState("");
@@ -17,20 +18,24 @@ const useIndex = () => {
   const handleChangeEmail = (event) => setEmail(event.target.value);
   const handleChangePassword = (event) => setPassword(event.target.value);
 
+  const payload = { usuario: email, password: password };
+
   const handleLogin = () => {
     //bater na rota passando atributo de email e senha
-    console.log({ email, password });
-    //caso der certo, jogar pra tela
-    handleSignUp();
-    //caso der erro,  mostrar toast
-    toast({
-      title: "Login",
-      description: "Dados incorretos",
-      position: "top-right",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
+
+    userLogin(payload).then(() => {
+        handleSignUp();
+      })
+      .catch(() => {
+        toast({
+          title: "Login",
+          description: "Dados incorretos",
+          position: "top-right",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      });
   };
 
   return {
