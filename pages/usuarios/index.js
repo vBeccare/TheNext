@@ -23,6 +23,7 @@ import {
   ModalFooter,
   Text,
 } from "@chakra-ui/react";
+import InputMask from "react-input-mask";
 import { AddIcon } from "@chakra-ui/icons";
 import Header from "../../components/Header";
 
@@ -31,6 +32,7 @@ import useUsuarios from "./hooks/useUsuarios";
 const Usuarios = ({}) => {
   const {
     handleChange,
+    createNewUser,
     filteredUsersList,
     value,
     initialChangeRef,
@@ -46,6 +48,19 @@ const Usuarios = ({}) => {
     groupForm,
     setNameForm,
     setGroupForm,
+    setEmailForm,
+    isButtonDisabled,
+
+    cpfValid,
+    isCpfValid,
+    setCpfForm,
+
+    setConfirmPassword,
+    setPassword,
+    hasSamePasswords,
+
+    nameValidator,
+    emailValidator,
   } = useUsuarios();
 
   return (
@@ -171,15 +186,23 @@ const Usuarios = ({}) => {
             </FormControl>
 
             {/* criar onChange para senhas e comparativo entre elas */}
-            <FormControl mt={4} isInvalid>
+            <FormControl mt={4} isInvalid={!hasSamePasswords}>
               <FormLabel>Senha</FormLabel>
-              <Input placeholder="******" />
+              <Input
+                placeholder="******"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid>
+            <FormControl mt={4} isInvalid={!hasSamePasswords}>
               <FormLabel>Confirmar senha</FormLabel>
-              <Input placeholder="******" />
+              <Input
+                placeholder="******"
+                type="password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
               <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
             </FormControl>
           </ModalBody>
@@ -204,27 +227,40 @@ const Usuarios = ({}) => {
           <ModalHeader>Novo usuário</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
+            <FormControl isInvalid={!nameValidator}>
               <FormLabel>Nome</FormLabel>
               <Input
                 ref={initialNewRef}
                 placeholder="Nome"
                 onChange={(e) => setNameForm(e.target.value)}
               />
+              <FormErrorMessage>Minimo 4 caracteres</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid>
+            <FormControl mt={4} isInvalid={!cpfValid}>
               <FormLabel>CPF</FormLabel>
-              <Input placeholder="CPF" />
+              <Input
+                as={InputMask}
+                mask="***.***.***-**"
+                placeholder="CPF"
+                onChange={(e) => {
+                  isCpfValid(e.target.value);
+                  setCpfForm(e.target.value);
+                }}
+              />
               <FormErrorMessage>CPF inválido</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={!emailValidator}>
               <FormLabel>E-mail</FormLabel>
-              <Input placeholder="E-mail" />
+              <Input
+                placeholder="E-mail"
+                onChange={(e) => setEmailForm(e.target.value)}
+              />
+               <FormErrorMessage>Email inválido</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={!groupForm}>
               <FormLabel>Grupo</FormLabel>
               <Select
                 placeholder="Selecione..."
@@ -233,24 +269,37 @@ const Usuarios = ({}) => {
                 <option>Administrador</option>
                 <option>Estoquista</option>
               </Select>
+              <FormErrorMessage>Selecione um item</FormErrorMessage>
             </FormControl>
 
-            {/* criar onChange para senhas e comparativo entre elas */}
-            <FormControl mt={4} isInvalid>
+            <FormControl mt={4} isInvalid={!hasSamePasswords}>
               <FormLabel>Senha</FormLabel>
-              <Input placeholder="******" />
+              <Input
+                placeholder="******"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid>
+            <FormControl mt={4} isInvalid={!hasSamePasswords}>
               <FormLabel>Confirmar senha</FormLabel>
-              <Input placeholder="******" />
+              <Input
+                placeholder="******"
+                type="password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
               <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="teal" mr={3}>
+            <Button
+              colorScheme="teal"
+              mr={3}
+              onClick={createNewUser}
+              isDisabled={isButtonDisabled}
+            >
               Salvar
             </Button>
             <Button onClick={() => setIsNewOpen(false)}>Cancelar</Button>

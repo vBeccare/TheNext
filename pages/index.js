@@ -25,6 +25,7 @@ const Login = () => {
         <Input
           placeholder="*******"
           variant="outline"
+          type="password"
           mb={12}
           onChange={handleChangePassword}
         />

@@ -2,14 +2,30 @@ import { IconButton } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import { CheckIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
+import { cpf } from "cpf-cnpj-validator";
+import { getAllUsers, userSignUp } from "../../../services/users";
+
 const useUsuarios = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
-  const [nameForm, setNameForm] = useState();
-  const [emailForm, setEmailForm] = useState();
+  const [nameForm, setNameForm] = useState("");
+  const [emailForm, setEmailForm] = useState("");
   const [groupForm, setGroupForm] = useState();
   const [idForm, setIdForm] = useState();
   const [value, setValue] = useState("");
+
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+
+  const hasSamePasswords = password === confirmPassword;
+
+  const [cpfForm, setCpfForm] = useState("");
+  const [cpfValid, setCpfValid] = useState(true);
+
+  const isCpfValid = (value) => {
+    const cpfNumbers = value.replaceAll(".", "").replace("-", "");
+    setCpfValid(cpf.isValid(cpfNumbers));
+  };
 
   const initialChangeRef = useRef(null);
   const finalChangeRef = useRef(null);
@@ -35,7 +51,41 @@ const useUsuarios = () => {
     console.log({ status });
   };
 
-  console.log({ nameForm, emailForm, groupForm });
+  const createNewUser = () => {
+    const payload = {
+      name: nameForm,
+      password: password,
+      usuario: emailForm,
+      email: emailForm,
+      cpf: parseInt(cpfForm.replaceAll(".", "").replace("-", "")),
+      grupo: groupForm === "Administrador" ? 1 : 2,
+      ativo: true,
+    };
+
+    userSignUp(payload)
+      .then(() => {
+        alert("cadastro realizado com sucesso");
+      })
+      .catch(() => {
+        alert("cadastro não foi realizado");
+      });
+
+    console.log({ payload });
+  };
+
+  const passwordValidator = !password || !confirmPassword || !hasSamePasswords;
+
+  const nameValidator = nameForm.length >= 4;
+  const emailValidator = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.?$/i.test(emailForm);
+
+  const isButtonDisabled =
+    passwordValidator ||
+    !cpfValid ||
+    !nameValidator ||
+    !emailValidator ||
+    !groupForm;
+
+  console.log({ passwordValidator, cpfValid, nameValidator, emailValidator });
 
   const Actions = ({ id, status, name, email, group }) => {
     return (
@@ -87,11 +137,12 @@ const useUsuarios = () => {
   });
 
   useEffect(() => {
-    //bater na rota para trazer os novos usuarios
+    getAllUsers()
   }, []);
 
   return {
     handleChange,
+    createNewUser,
     filteredUsersList,
     value,
     initialChangeRef,
@@ -107,6 +158,20 @@ const useUsuarios = () => {
     groupForm,
     setNameForm,
     setGroupForm,
+    setEmailForm,
+    isButtonDisabled,
+
+    cpfValid,
+    isCpfValid,
+    setCpfForm,
+
+    setConfirmPassword,
+    setPassword,
+    hasSamePasswords,
+
+    nameValidator,
+    emailValidator,
+    groupForm,
   };
 };
 
