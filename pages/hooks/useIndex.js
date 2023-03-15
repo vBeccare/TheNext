@@ -9,27 +9,28 @@ const useIndex = () => {
 
   const toast = useToast();
 
-  const handleSignUp = (data = "administrador") => {
-    //salvar grupo do user no localStorage
-    localStorage.setItem("userGroup", data);
-    Router.push("/usuarios");
+  const handleSignUp = (data) => {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("grupo", data.grupo);
+    localStorage.setItem("email", data.email);
+    localStorage.setItem("nome", data.name);
+    Router.push("/home");
   };
 
   const handleChangeEmail = (event) => setEmail(event.target.value);
   const handleChangePassword = (event) => setPassword(event.target.value);
 
-  const payload = { usuario: email, password: password };
+  const payload = { email: email, password: password };
 
   const handleLogin = () => {
-    //bater na rota passando atributo de email e senha
-
-    userLogin(payload).then(() => {
-        handleSignUp();
+    userLogin(payload)
+      .then((res) => {
+        handleSignUp(res.data);
       })
       .catch(() => {
         toast({
           title: "Login",
-          description: "Dados incorretos",
+          description: "Falha ao tentar entrar",
           position: "top-right",
           status: "error",
           duration: 3000,

@@ -4,8 +4,11 @@ import { CheckIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { cpf } from "cpf-cnpj-validator";
 import { getAllUsers, userSignUp } from "../../../services/users";
+import useLocal from "../../../hooks/useLocal";
 
 const useUsuarios = () => {
+  const { userLoggedEmail } = useLocal();
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
   const [nameForm, setNameForm] = useState("");
@@ -13,6 +16,10 @@ const useUsuarios = () => {
   const [groupForm, setGroupForm] = useState();
   const [idForm, setIdForm] = useState();
   const [value, setValue] = useState("");
+  const [usersList, setUsersList] = useState([]);
+
+  const [isSameUser, setIsSameUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
@@ -34,9 +41,13 @@ const useUsuarios = () => {
 
   const onClose = () => {
     setIsEditOpen(false);
+    setIsSameUser(false);
   };
 
   const openModal = ({ name, email, group, id }) => {
+    if (email === userLoggedEmail) {
+      setIsSameUser(true);
+    }
     setNameForm(name);
     setEmailForm(email);
     setGroupForm(group);
@@ -65,12 +76,14 @@ const useUsuarios = () => {
     userSignUp(payload)
       .then(() => {
         alert("cadastro realizado com sucesso");
+        getAllUsers().then((res) => {
+          setUsersList(res.data);
+          setIsNewOpen(false);
+        });
       })
       .catch(() => {
         alert("cadastro não foi realizado");
       });
-
-    console.log({ payload });
   };
 
   const passwordValidator = !password || !confirmPassword || !hasSamePasswords;
@@ -84,8 +97,6 @@ const useUsuarios = () => {
     !nameValidator ||
     !emailValidator ||
     !groupForm;
-
-  console.log({ passwordValidator, cpfValid, nameValidator, emailValidator });
 
   const Actions = ({ id, status, name, email, group }) => {
     return (
@@ -105,39 +116,26 @@ const useUsuarios = () => {
     );
   };
 
-  const usersList = [
-    {
-      id: "",
-      name: "Victor Beccare",
-      email: "vbeccare@email.com",
-      status: "ativo",
-      group: "Administrador",
+  const formattedList = usersList.map((user) => {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.ativo ? "ativo" : "desativado",
+      group: user.grupo === 1 ? "Administrador" : "Estoquista",
       Acoes: (props) => Actions({ ...props }),
-    },
-    {
-      id: "",
-      name: "Bruna Vieira",
-      email: "bruna@email.com",
-      status: "inativo",
-      group: "Administrador",
-      Acoes: (props) => Actions({ ...props }),
-    },
-    {
-      id: "",
-      name: "Victor Beccare",
-      email: "vbeccare@email.com",
-      status: "ativo",
-      group: "Administrador",
-      Acoes: (props) => Actions({ ...props }),
-    },
-  ];
+    };
+  });
 
-  const filteredUsersList = usersList.filter(({ name }) => {
+  const filteredUsersList = formattedList.filter(({ name }) => {
     return name.includes(value);
   });
 
   useEffect(() => {
-    getAllUsers()
+    getAllUsers().then((res) => {
+      setUsersList(res.data);
+      setIsLoading(false);
+    });
   }, []);
 
   return {
@@ -172,6 +170,9 @@ const useUsuarios = () => {
     nameValidator,
     emailValidator,
     groupForm,
+
+    isLoading,
+    isSameUser,
   };
 };
 

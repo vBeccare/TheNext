@@ -9,9 +9,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+import useLocal from "../../hooks/useLocal";
+
 import Router from "next/router";
 
 const Header = ({ pageActive = "users" }) => {
+  const { isAdmin } = useLocal();
+
   const handleSignIn = () => {
     Router.push("/");
   };
@@ -20,6 +24,9 @@ const Header = ({ pageActive = "users" }) => {
   };
   const handleProducts = () => {
     Router.push("/produtos");
+  };
+  const handleHome = () => {
+    Router.push("/home");
   };
   return (
     <Box
@@ -31,16 +38,24 @@ const Header = ({ pageActive = "users" }) => {
       h="120px"
       bgColor="teal.500"
     >
-      <Image boxSize="80px" src="/logoadm.png" />
+      <Image
+        boxSize="80px"
+        cursor="pointer"
+        src="/logoadm.png"
+        onClick={handleHome}
+      />
       <Box display="flex" gap="40px" justifyContent="" color="white">
-        <Text
-          fontWeight={pageActive === "users" && "bold"}
-          borderBottom={pageActive === "users" && "1px"}
-          cursor="pointer"
-          onClick={handleUsers}
-        >
-          Usuários
-        </Text>
+        {isAdmin && (
+          <Text
+            fontWeight={"bold"}
+            // fontWeight={pageActive === "users" && "bold"}
+            // borderBottom={pageActive === "users" && "1px"}
+            cursor="pointer"
+            onClick={handleUsers}
+          >
+            Usuários
+          </Text>
+        )}
         <Text
           // fontWeight={pageActive === "users" && "bold"}
           // borderBottom={pageActive === "users" && "1px"}

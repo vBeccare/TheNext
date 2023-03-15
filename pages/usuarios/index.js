@@ -13,6 +13,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  Spinner,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -28,6 +29,9 @@ import { AddIcon } from "@chakra-ui/icons";
 import Header from "../../components/Header";
 
 import useUsuarios from "./hooks/useUsuarios";
+import useLocal from "../../hooks/useLocal";
+
+import Router from "next/router";
 
 const Usuarios = ({}) => {
   const {
@@ -61,10 +65,46 @@ const Usuarios = ({}) => {
 
     nameValidator,
     emailValidator,
+
+    isLoading,
+    isSameUser,
   } = useUsuarios();
 
+  const { isAdmin } = useLocal();
+
+  if (isLoading) {
+    return (
+      <Flex
+        height="100vh"
+        marginBottom={16}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
+        <Header />
+        <Spinner
+          marginY="auto"
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="teal.500"
+          size="xl"
+        />
+      </Flex>
+    );
+  }
+
+  if (!isAdmin) {
+    Router.push("/home");
+  }
+
   return (
-    <Flex height="100vh" display="flex" flexDirection="column">
+    <Flex
+      height="100vh"
+      marginBottom={16}
+      display="flex"
+      flexDirection="column"
+    >
       <Header />
       <Flex
         display="flex"
@@ -102,9 +142,9 @@ const Usuarios = ({}) => {
             </Thead>
             <Tbody>
               {filteredUsersList.map(
-                ({ id, name, email, status, group, Acoes }) => {
+                ({ id, name, email, status, group, Acoes }, idx) => {
                   return (
-                    <Tr>
+                    <Tr key={idx}>
                       <Td>{name}</Td>
                       <Td>{email} </Td>
                       <Td>{status}</Td>
@@ -179,6 +219,7 @@ const Usuarios = ({}) => {
                 placeholder="Selecione..."
                 value={groupForm}
                 onChange={(e) => setGroupForm(e.target.value)}
+                isDisabled={isSameUser}
               >
                 <option>Administrador</option>
                 <option>Estoquista</option>
@@ -257,7 +298,7 @@ const Usuarios = ({}) => {
                 placeholder="E-mail"
                 onChange={(e) => setEmailForm(e.target.value)}
               />
-               <FormErrorMessage>Email inválido</FormErrorMessage>
+              <FormErrorMessage>Email inválido</FormErrorMessage>
             </FormControl>
 
             <FormControl mt={4} isInvalid={!groupForm}>
