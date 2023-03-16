@@ -5,14 +5,14 @@ const useHome = () => {
   const [userLoggedName, setUserLoggedName] = useState();
   useEffect(() => {
     setUserLoggedGroup(
-      localStorage.getItem("grupo") === 1 ? "Administrador" : "Estoquista"
+      localStorage.getItem("grupo") === "1" ? "Administrador" : "Estoquista"
     );
     setUserLoggedName(localStorage.getItem("nome"));
   }, []);
 
   return {
     userLoggedGroup,
-		userLoggedName
+    userLoggedName,
   };
 };
 

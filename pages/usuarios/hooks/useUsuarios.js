@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { CheckIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { cpf } from "cpf-cnpj-validator";
-import { getAllUsers, userSignUp } from "../../../services/users";
+import { getAllUsers, userSignUp, userUpdate } from "../../../services/users";
 import useLocal from "../../../hooks/useLocal";
 
 const useUsuarios = () => {
@@ -44,13 +44,14 @@ const useUsuarios = () => {
     setIsSameUser(false);
   };
 
-  const openModal = ({ name, email, group, id }) => {
+  const openModal = ({ name, email, group, id, cpf }) => {
     if (email === userLoggedEmail) {
       setIsSameUser(true);
     }
     setNameForm(name);
     setEmailForm(email);
     setGroupForm(group);
+    setCpfForm(cpf)
     setIdForm(id);
     setIsEditOpen(true);
   };
@@ -86,6 +87,30 @@ const useUsuarios = () => {
       });
   };
 
+  const updateUser = () => {
+    const payload = {
+      name: nameForm,
+      password: password,
+      usuario: emailForm,
+      email: emailForm,
+      cpf: parseInt(cpfForm.replaceAll(".", "").replace("-", "")),
+      grupo: groupForm === "Administrador" ? 1 : 2,
+      ativo: true,
+    };
+
+    userUpdate(payload)
+      .then(() => {
+        alert("Usuário atualizado com sucesso");
+        getAllUsers().then((res) => {
+          setUsersList(res.data);
+          setIsEditOpen(false);
+        });
+      })
+      .catch(() => {
+        alert("Não foi possível atualizar o usuário");
+      });
+  };
+
   const passwordValidator = !password || !confirmPassword || !hasSamePasswords;
 
   const nameValidator = nameForm.length >= 4;
@@ -98,11 +123,11 @@ const useUsuarios = () => {
     !emailValidator ||
     !groupForm;
 
-  const Actions = ({ id, status, name, email, group }) => {
+  const Actions = ({ id, status, name, email, group, cpf }) => {
     return (
       <>
         <IconButton
-          onClick={() => openModal({ name, email, group, id })}
+          onClick={() => openModal({ name, email, group, id, cpf })}
           colorScheme="yellow"
           icon={<EditIcon />}
         />
@@ -121,6 +146,7 @@ const useUsuarios = () => {
       id: user.id,
       name: user.name,
       email: user.email,
+      cpf: user.cpf,
       status: user.ativo ? "ativo" : "desativado",
       group: user.grupo === 1 ? "Administrador" : "Estoquista",
       Acoes: (props) => Actions({ ...props }),
@@ -173,6 +199,7 @@ const useUsuarios = () => {
 
     isLoading,
     isSameUser,
+    updateUser
   };
 };
 

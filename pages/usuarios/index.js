@@ -68,6 +68,7 @@ const Usuarios = ({}) => {
 
     isLoading,
     isSameUser,
+    updateUser
   } = useUsuarios();
 
   const { isAdmin } = useLocal();
@@ -129,7 +130,7 @@ const Usuarios = ({}) => {
         </Button>
       </Flex>
       {filteredUsersList.length > 0 && (
-        <TableContainer display="flex" marginX={32} marginTop={16}>
+        <TableContainer display="flex" overflowY="scroll" marginX={32} marginTop={16}>
           <Table variant="striped" colorScheme="gray">
             <Thead>
               <Tr>
@@ -142,7 +143,7 @@ const Usuarios = ({}) => {
             </Thead>
             <Tbody>
               {filteredUsersList.map(
-                ({ id, name, email, status, group, Acoes }, idx) => {
+                ({ id, name, email, status, group, cpf, Acoes }, idx) => {
                   return (
                     <Tr key={idx}>
                       <Td>{name}</Td>
@@ -155,6 +156,7 @@ const Usuarios = ({}) => {
                           email={email}
                           group={group}
                           status={status}
+                          cpf={cpf}
                           id={id}
                         />
                       </Td>
@@ -249,7 +251,7 @@ const Usuarios = ({}) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="teal" mr={3}>
+            <Button colorScheme="teal" mr={3} onClick={updateUser}>
               Salvar
             </Button>
             <Button onClick={onClose}>Cancelar</Button>
