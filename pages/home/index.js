@@ -4,7 +4,7 @@ import useHome from "./hooks/useHome";
 
 import Header from "../../components/Header";
 
-const Home = ({}) => {
+const Home = () => {
   const { userLoggedGroup, userLoggedName } = useHome();
   return (
     <Flex

@@ -1,0 +1,18 @@
+.pagination {
+	display: flex;
+	justify-content: space-evenly;
+  border: 1px solid black;
+	border-radius: 8px;
+	padding: 8px;
+  width: 50%;
+  margin: 32px auto 0;
+}
+
+.pagination > li {
+  list-style: none;
+}
+
+.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
