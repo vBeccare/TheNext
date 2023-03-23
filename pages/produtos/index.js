@@ -36,6 +36,7 @@ import Router from "next/router";
 import ReactPaginate from "react-paginate";
 
 import styles from "./style.module.css";
+import EditModal from "./components/EditModal";
 
 const Usuarios = () => {
   const {
@@ -52,7 +53,6 @@ const Usuarios = () => {
     setIsNewOpen,
     onClose,
     nameForm,
-    emailForm,
     groupForm,
     setNameForm,
     setGroupForm,
@@ -71,7 +71,6 @@ const Usuarios = () => {
     emailValidator,
 
     isLoading,
-    isSameUser,
     updateUser,
   } = useProdutos();
 
@@ -99,10 +98,6 @@ const Usuarios = () => {
         />
       </Flex>
     );
-  }
-
-  if (!isAdmin) {
-    Router.push("/home");
   }
 
   return (
@@ -159,7 +154,10 @@ const Usuarios = () => {
                   return (
                     <Tr key={idx}>
                       <Td>{idx}</Td>
-                      <Td maxWidth={80} overflowX="scroll">Samsung S23 ULTRA com camera 23 adhu asdhus ashduasd sahdusah sahduash ahsudash </Td>
+                      <Td maxWidth={80} overflowX="scroll">
+                        Samsung S23 ULTRA com camera 23 adhu asdhus ashduasd
+                        sahdusah sahduash ahsudash{" "}
+                      </Td>
                       <Td>quantidade </Td>
                       <Td>valor</Td>
                       <Td>{status}</Td>
@@ -214,80 +212,22 @@ const Usuarios = () => {
         </Text>
       )}
 
-      <Modal
-        initialFocusRef={initialChangeRef}
-        finalFocusRef={finalChangeRef}
-        isOpen={isEditOpen}
+      <EditModal
+        initialChangeRef={initialChangeRef}
+        finalChangeRef={finalChangeRef}
+        isEditOpen={isEditOpen}
         onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Alterar usuário</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Nome</FormLabel>
-              <Input
-                ref={initialChangeRef}
-                value={nameForm}
-                placeholder="Nome"
-                onChange={(e) => setNameForm(e.target.value)}
-              />
-            </FormControl>
-
-            <FormControl mt={4} pointerEvents="none">
-              <FormLabel>E-mail</FormLabel>
-              <Input
-                backgroundColor="gray.200"
-                value={emailForm}
-                placeholder="E-mail"
-                isReadOnly
-              />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Grupo</FormLabel>
-              <Select
-                placeholder="Selecione..."
-                value={groupForm}
-                onChange={(e) => setGroupForm(e.target.value)}
-                isDisabled={isSameUser}
-              >
-                <option>Administrador</option>
-                <option>Estoquista</option>
-              </Select>
-            </FormControl>
-
-            {/* criar onChange para senhas e comparativo entre elas */}
-            <FormControl mt={4} isInvalid={!hasSamePasswords}>
-              <FormLabel>Senha</FormLabel>
-              <Input
-                placeholder="******"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
-            </FormControl>
-
-            <FormControl mt={4} isInvalid={!hasSamePasswords}>
-              <FormLabel>Confirmar senha</FormLabel>
-              <Input
-                placeholder="******"
-                type="password"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="teal" mr={3} onClick={updateUser}>
-              Salvar
-            </Button>
-            <Button onClick={onClose}>Cancelar</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        nameForm={nameForm}
+        setNameForm={setNameForm}
+        // descriptionForm={descriptionForm}
+        // setDescriptionForm={setDescriptionForm}
+        // priceForm={priceForm}
+        // setPriceForm={setPriceForm}
+        // qtdForm={qtdForm}
+        // setQtdForm={setQtdForm}
+        updateProduct={updateUser}
+        isAdmin={isAdmin}
+      />
 
       <Modal
         initialFocusRef={initialNewRef}
