@@ -8,6 +8,8 @@ import {
   AttachmentIcon,
 } from "@chakra-ui/icons";
 
+import Router from "next/router";
+
 import { cpf } from "cpf-cnpj-validator";
 import { getAllUsers, userSignUp, userUpdate } from "../../../services/users";
 import useLocal from "../../../hooks/useLocal";
@@ -67,6 +69,10 @@ const useUsuarios = () => {
   const handleChangeStatus = (status, id) => {
     //bater na rota para mudar o status atual
     console.log({ status });
+  };
+
+  const handleVisualizeProduct = (id) => {
+    Router.push(`/visualizar-produto/?produto=${id}`);
   };
 
   const createNewUser = () => {
@@ -150,7 +156,7 @@ const useUsuarios = () => {
           icon={<AttachmentIcon />}
         />
         <IconButton
-          onClick={() => handleChangeStatus(status, id)}
+          onClick={() => handleVisualizeProduct(id)}
           marginLeft={4}
           colorScheme={"blue"}
           icon={<ViewIcon />}
