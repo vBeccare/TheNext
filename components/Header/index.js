@@ -10,24 +10,19 @@ import {
 } from "@chakra-ui/react";
 
 import useLocal from "../../hooks/useLocal";
+import useHeader from "./hooks/useHeader";
 
-import Router from "next/router";
-
-const Header = ({ pageActive = "users" }) => {
+const Header = () => {
   const { isAdmin } = useLocal();
+  const {
+    handleSignIn,
+    handleUsers,
+    handleProducts,
+    handleHome,
+    isProductPath,
+    isUserPath,
+  } = useHeader();
 
-  const handleSignIn = () => {
-    Router.push("/");
-  };
-  const handleUsers = () => {
-    Router.push("/usuarios");
-  };
-  const handleProducts = () => {
-    Router.push("/produtos");
-  };
-  const handleHome = () => {
-    Router.push("/home");
-  };
   return (
     <Box
       display="flex"
@@ -44,12 +39,12 @@ const Header = ({ pageActive = "users" }) => {
         src="/logoadm.png"
         onClick={handleHome}
       />
-      <Box display="flex" gap="40px" justifyContent="" color="white">
+      <Box display="flex" gap="40px" fontSize={16} justifyContent="">
         {isAdmin && (
           <Text
-            fontWeight={"bold"}
-            // fontWeight={pageActive === "users" && "bold"}
-            // borderBottom={pageActive === "users" && "1px"}
+            color="white"
+            fontWeight={isUserPath && "bold"}
+            borderBottom={isUserPath && "1px"}
             cursor="pointer"
             onClick={handleUsers}
           >
@@ -57,11 +52,11 @@ const Header = ({ pageActive = "users" }) => {
           </Text>
         )}
         <Text
-          // fontWeight={pageActive === "users" && "bold"}
-          // borderBottom={pageActive === "users" && "1px"}
-          color="gray.400"
-          cursor="not-allowed"
-          // onClick={handleProducts}
+          fontWeight={isProductPath && "bold"}
+          borderBottom={isProductPath && "1px"}
+          cursor="pointer"
+          color="white"
+          onClick={handleProducts}
         >
           Produtos
         </Text>
