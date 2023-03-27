@@ -3,7 +3,12 @@ import { useState, useRef, useEffect } from "react";
 import { CheckIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import { cpf } from "cpf-cnpj-validator";
-import { getAllUsers, userSignUp, userUpdate } from "../../../services/users";
+import {
+  getAllUsers,
+  userSignUp,
+  userUpdate,
+  userUpdateStatus,
+} from "../../../services/users";
 import useLocal from "../../../hooks/useLocal";
 
 const useUsuarios = () => {
@@ -51,16 +56,19 @@ const useUsuarios = () => {
     setNameForm(name);
     setEmailForm(email);
     setGroupForm(group);
-    setCpfForm(cpf)
+    setCpfForm(cpf);
     setIdForm(id);
     setIsEditOpen(true);
   };
 
   const handleChange = (event) => setValue(event.target.value);
 
-  const handleChangeStatus = (status, id) => {
-    //bater na rota para mudar o status atual
-    console.log({ status });
+  const handleChangeStatus = (email) => {
+    userUpdateStatus({ email: email }).then(() => {
+      getAllUsers().then((res) => {
+        setUsersList(res.data);
+      });
+    });
   };
 
   const createNewUser = () => {
@@ -132,7 +140,7 @@ const useUsuarios = () => {
           icon={<EditIcon />}
         />
         <IconButton
-          onClick={() => handleChangeStatus(status, id)}
+          onClick={() => handleChangeStatus(email)}
           marginLeft={4}
           colorScheme={status !== "ativo" ? "green" : "red"}
           icon={status !== "ativo" ? <CheckIcon /> : <NotAllowedIcon />}
@@ -199,7 +207,7 @@ const useUsuarios = () => {
 
     isLoading,
     isSameUser,
-    updateUser
+    updateUser,
   };
 };
 

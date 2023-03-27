@@ -18,6 +18,16 @@ export const userUpdate = (payload) => {
   return axios.put("http://localhost:8080/usuarios/atualizar", payload, config);
 };
 
+export const userUpdateStatus = (payload) => {
+  const token = localStorage.getItem("token");
+  let config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  return axios.put("http://localhost:8080/usuarios/atualizar-status", payload, config);
+};
+
 export const getAllUsers = () => {
   const token = localStorage.getItem("token");
   let config = {

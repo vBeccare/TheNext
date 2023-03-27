@@ -2,7 +2,7 @@ import { Button, Flex, Image, Text } from "@chakra-ui/react"
 import Header from "../../components/Header";
 
 const VisualizarProduto = () => {
-    const stars = document.querySelectorAll('.star');
+    // const stars = document.querySelectorAll('.star');
 
     return (
         <Flex
@@ -12,10 +12,10 @@ const VisualizarProduto = () => {
             flexDirection="column"
         >
             <Header />
-            <Flex padding="32px" >
+            <Flex padding="32px" marginX={"auto"}>
                 <Flex marginY={"auto"} flexDirection="column" alignItems="center" backgroundColor="#d9d9d9" borderRadius="8px" padding="32px">
                     <Image
-                        width="450px" k
+                        width="450px" 
                         height="450px"
                         cursor="pointer"
                         src="/iphone14.jpg"
