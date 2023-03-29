@@ -1619,6 +1619,11 @@ scheduler@^0.23.0:
   dependencies:
     loose-envify "^1.1.0"
 
+simple-mask-money@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/simple-mask-money/-/simple-mask-money-3.0.1.tgz#f96dbe641f0cfa5a0458017a1b92b0402e78bd25"
+  integrity sha512-EdQsBiOE0MhWCpCkUzUm7vbxPviTn/FWXQV6kmYggFLBlBDdWbJGyithizmwdeBFQiunPBZruU2xoX2H8Qlv9w==
+
 source-map-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"

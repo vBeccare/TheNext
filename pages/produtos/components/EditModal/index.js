@@ -18,16 +18,16 @@ const EditModal = ({
   finalChangeRef,
   isEditOpen,
   onClose,
-  nameForm,
-  setNameForm,
-  descriptionForm,
-  setDescriptionForm,
-  priceForm,
-  setPriceForm,
-  qtdForm,
-  setQtdForm,
   updateProduct,
   isAdmin,
+  nameForm,
+  setNameForm,
+  priceForm,
+  handleInputNumberChange,
+  qtdForm,
+  setQtdForm,
+  setDescricao,
+  descricao,
 }) => {
   return (
     <Modal
@@ -55,10 +55,10 @@ const EditModal = ({
           <FormControl mt={4}>
             <FormLabel>Descrição</FormLabel>
             <Textarea
-              value={descriptionForm}
+              value={descricao}
               isReadOnly={!isAdmin}
               placeholder="Descreva o produto"
-              onChange={(e) => setDescriptionForm(e.target.value)}
+              onChange={(e) => setDescricao(e.target.value)}
             />
           </FormControl>
 
@@ -68,8 +68,11 @@ const EditModal = ({
               value={priceForm}
               isReadOnly={!isAdmin}
               placeholder="Preço"
-              onChange={(e) => setPriceForm(e.target.value)}
-            />
+              inputMode="number"
+              onChange={(e) => {
+                handleInputNumberChange(e.target.value);
+              }}
+            ></Input>
           </FormControl>
 
           <FormControl mt={4}>

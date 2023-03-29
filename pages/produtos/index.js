@@ -19,12 +19,11 @@ import {
   ModalBody,
   FormControl,
   FormLabel,
-  Select,
   FormErrorMessage,
   ModalFooter,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
-import InputMask from "react-input-mask";
 import { AddIcon } from "@chakra-ui/icons";
 import Header from "../../components/Header";
 
@@ -32,16 +31,17 @@ import useProdutos from "./hooks/useProdutos";
 import usePagination from "./hooks/usePagination";
 import useLocal from "../../hooks/useLocal";
 
-import Router from "next/router";
 import ReactPaginate from "react-paginate";
 
 import styles from "./style.module.css";
 import EditModal from "./components/EditModal";
+import { getMoneyMask } from "../../utils/formatters";
+import useFormatters from "./hooks/useFormatters";
 
 const Usuarios = () => {
   const {
     handleChange,
-    createNewUser,
+    createNewProduct,
     filteredProductList,
     value,
     initialChangeRef,
@@ -53,28 +53,27 @@ const Usuarios = () => {
     setIsNewOpen,
     onClose,
     nameForm,
-    groupForm,
     setNameForm,
-    setGroupForm,
-    setEmailForm,
     isButtonDisabled,
 
-    cpfValid,
-    isCpfValid,
-    setCpfForm,
-
-    setConfirmPassword,
-    setPassword,
-    hasSamePasswords,
-
     nameValidator,
-    emailValidator,
 
     isLoading,
     updateUser,
+
+    setPriceForm,
+    priceForm,
+    setQtdForm,
+    qtdForm,
+    setDescricao,
+    descricao,
   } = useProdutos();
 
   const { onChangePage } = usePagination();
+
+  const { handleInputNumberChange } = useFormatters({
+    setPriceForm,
+  });
 
   const { isAdmin } = useLocal();
 
@@ -124,7 +123,10 @@ const Usuarios = () => {
         />
         <Button
           rightIcon={<AddIcon />}
-          onClick={() => setIsNewOpen(true)}
+          onClick={() => {
+            setPriceForm();
+            setIsNewOpen(true);
+          }}
           colorScheme="green"
         >
           Adicionar produto
@@ -150,25 +152,39 @@ const Usuarios = () => {
             </Thead>
             <Tbody>
               {filteredProductList.map(
-                ({ id, name, email, status, group, cpf, Acoes }, idx) => {
+                (
+                  {
+                    id,
+                    name,
+                    quantidade,
+                    valor,
+                    status,
+                    descricao,
+                    avaliacao,
+                    imagens,
+                    Acoes,
+                  },
+                  idx
+                ) => {
                   return (
                     <Tr key={idx}>
-                      <Td>{idx}</Td>
+                      <Td>{id}</Td>
                       <Td maxWidth={80} overflowX="scroll">
-                        Samsung S23 ULTRA com camera 23 adhu asdhus ashduasd
-                        sahdusah sahduash ahsudash{" "}
+                        {name}
                       </Td>
-                      <Td>quantidade </Td>
-                      <Td>valor</Td>
+                      <Td>{quantidade} </Td>
+                      <Td>{getMoneyMask(valor, "R$", 2)}</Td>
                       <Td>{status}</Td>
                       <Td>
                         <Acoes
-                          name={name}
-                          email={email}
-                          group={group}
-                          status={status}
-                          cpf={cpf}
                           id={id}
+                          name={name}
+                          quantidade={quantidade}
+                          valor={valor}
+                          status={status}
+                          descricao={descricao}
+                          avaliacao={avaliacao}
+                          imagens={imagens}
                         />
                       </Td>
                     </Tr>
@@ -199,7 +215,7 @@ const Usuarios = () => {
           containerClassName={styles.pagination}
           subContainerClassName={"pages pagination"}
           initialPage={0}
-          pageCount={25}
+          pageCount={1}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={onChangePage}
@@ -219,25 +235,28 @@ const Usuarios = () => {
         onClose={onClose}
         nameForm={nameForm}
         setNameForm={setNameForm}
-        // descriptionForm={descriptionForm}
-        // setDescriptionForm={setDescriptionForm}
-        // priceForm={priceForm}
-        // setPriceForm={setPriceForm}
-        // qtdForm={qtdForm}
-        // setQtdForm={setQtdForm}
         updateProduct={updateUser}
         isAdmin={isAdmin}
+        handleInputNumberChange={handleInputNumberChange}
+        priceForm={priceForm}
+        setPriceForm={setPriceForm}
+        qtdForm={qtdForm}
+        setQtdForm={setQtdForm}
+        setDescricao={setDescricao}
+        descricao={descricao}
       />
 
       <Modal
         initialFocusRef={initialNewRef}
         finalFocusRef={finalNewRef}
         isOpen={isNewOpen}
-        onClose={() => setIsNewOpen(false)}
+        onClose={() => {
+          setIsNewOpen(false);
+        }}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Novo usuário</ModalHeader>
+          <ModalHeader>Novo produto</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isInvalid={!nameValidator}>
@@ -250,59 +269,31 @@ const Usuarios = () => {
               <FormErrorMessage>Minimo 4 caracteres</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!cpfValid}>
-              <FormLabel>CPF</FormLabel>
-              <Input
-                as={InputMask}
-                mask="***.***.***-**"
-                placeholder="CPF"
+            <FormControl mt={4}>
+              <FormLabel>Descrição</FormLabel>
+              <Textarea
+                placeholder="Máximo 2000 caracteres"
                 onChange={(e) => {
-                  isCpfValid(e.target.value);
-                  setCpfForm(e.target.value);
+                  setDescricao(e.target.value);
                 }}
               />
-              <FormErrorMessage>CPF inválido</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!emailValidator}>
-              <FormLabel>E-mail</FormLabel>
+            <FormControl mt={4}>
+              <FormLabel>Preço</FormLabel>
               <Input
-                placeholder="E-mail"
-                onChange={(e) => setEmailForm(e.target.value)}
+                value={priceForm}
+                placeholder="R$ 0,00"
+                onChange={(e) => handleInputNumberChange(e.target.value)}
               />
-              <FormErrorMessage>Email inválido</FormErrorMessage>
             </FormControl>
 
-            <FormControl mt={4} isInvalid={!groupForm}>
-              <FormLabel>Grupo</FormLabel>
-              <Select
-                placeholder="Selecione..."
-                onChange={(e) => setGroupForm(e.target.value)}
-              >
-                <option>Administrador</option>
-                <option>Estoquista</option>
-              </Select>
-              <FormErrorMessage>Selecione um item</FormErrorMessage>
-            </FormControl>
-
-            <FormControl mt={4} isInvalid={!hasSamePasswords}>
-              <FormLabel>Senha</FormLabel>
+            <FormControl mt={4}>
+              <FormLabel>Quantidade</FormLabel>
               <Input
-                placeholder="******"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="0"
+                onChange={(e) => setQtdForm(e.target.value)}
               />
-              <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
-            </FormControl>
-
-            <FormControl mt={4} isInvalid={!hasSamePasswords}>
-              <FormLabel>Confirmar senha</FormLabel>
-              <Input
-                placeholder="******"
-                type="password"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <FormErrorMessage>As senhas não são iguais</FormErrorMessage>
             </FormControl>
           </ModalBody>
 
@@ -310,7 +301,7 @@ const Usuarios = () => {
             <Button
               colorScheme="teal"
               mr={3}
-              onClick={createNewUser}
+              onClick={createNewProduct}
               isDisabled={isButtonDisabled}
             >
               Salvar

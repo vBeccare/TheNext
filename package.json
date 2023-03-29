@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-input-mask": "^2.0.4",
     "react-paginate": "^8.1.4",
-    "react-simple-image-viewer": "^1.2.2"
+    "react-simple-image-viewer": "^1.2.2",
+    "simple-mask-money": "3.0.1"
   }
 }
