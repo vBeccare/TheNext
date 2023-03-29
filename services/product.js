@@ -11,7 +11,7 @@ export const getAllProduct = ({ page }) => {
   return axios.get(`http://localhost:8080/produtos/all?size=10&page=${page - 1}`, config);
 };
 
-export const getProductByUuid = (id) => {
+export const getProductByUuid = ({id}) => {
   const token = localStorage.getItem("token");
   let config = {
     headers: {
