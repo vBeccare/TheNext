@@ -8,12 +8,20 @@ import {
   AttachmentIcon,
 } from "@chakra-ui/icons";
 
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
-import { getAllProduct, postProduct, productUpdateStatus } from "../../../services/product";
+import {
+  getAllProduct,
+  postProduct,
+  productUpdateStatus,
+  updateProduct,
+} from "../../../services/product";
 import { getMoneyMask } from "../../../utils/formatters";
 
-const useUsuarios = () => {
+const useUsuarios = ({ setPageCount }) => {
+  const route = useRouter();
+  const page = route.query.page;
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
   const [nameForm, setNameForm] = useState("");
@@ -37,14 +45,7 @@ const useUsuarios = () => {
     setIsEditOpen(false);
   };
 
-  const openModal = ({
-    id,
-    name,
-    quantidade,
-    valor,
-
-    descricao,
-  }) => {
+  const openModal = ({ id, name, quantidade, valor, descricao }) => {
     setNameForm(name);
     setIdForm(id);
     setQtdForm(quantidade);
@@ -57,7 +58,8 @@ const useUsuarios = () => {
 
   const handleChangeStatus = (id) => {
     productUpdateStatus({ id: id }).then(() => {
-      getAllProduct().then((res) => {
+      getAllProduct({ page }).then((res) => {
+        setPageCount(res.data.totalPages);
         setProductList(res.data.content);
       });
     });
@@ -82,7 +84,8 @@ const useUsuarios = () => {
     postProduct(payload)
       .then(() => {
         alert("cadastro realizado com sucesso");
-        getAllProduct().then((res) => {
+        getAllProduct({ page }).then((res) => {
+          setPageCount(res.data.totalPages);
           setProductList(res.data.content);
           setPriceForm(0);
           setIsNewOpen(false);
@@ -93,27 +96,28 @@ const useUsuarios = () => {
       });
   };
 
-  const updateUser = () => {
+  const handleUpdateProduct = () => {
     const payload = {
+      id: idForm,
       name: nameForm,
-      password: password,
-      usuario: emailForm,
-      email: emailForm,
-      cpf: parseInt(cpfForm.replaceAll(".", "").replace("-", "")),
-      grupo: groupForm === "Administrador" ? 1 : 2,
-      ativo: true,
+      descricao: descricao,
+      preco: parseFloat(
+        priceForm.replace("R$ ", "").replace(".", "").replace(",", ".")
+      ),
+      quantidade: Number(qtdForm),
     };
 
-    productUpdateStatus(payload)
+    updateProduct(payload)
       .then(() => {
-        alert("Usuário atualizado com sucesso");
-        getAllProduct().then((res) => {
+        alert("Produto atualizado com sucesso");
+        getAllProduct({ page }).then((res) => {
+          setPageCount(res.data.totalPages);
           setProductList(res.data.content);
           setIsEditOpen(false);
         });
       })
       .catch(() => {
-        alert("Não foi possível atualizar o usuário");
+        alert("Não foi possível atualizar o produto");
       });
   };
 
@@ -191,11 +195,12 @@ const useUsuarios = () => {
   });
 
   useEffect(() => {
-    getAllProduct().then((res) => {
+    getAllProduct({ page }).then((res) => {
+      setPageCount(res.data.totalPages);
       setProductList(res.data.content);
       setIsLoading(false);
     });
-  }, []);
+  }, [page]);
 
   return {
     handleChange,
@@ -219,7 +224,7 @@ const useUsuarios = () => {
     nameValidator,
 
     isLoading,
-    updateUser,
+    handleUpdateProduct,
 
     setPriceForm,
     priceForm,

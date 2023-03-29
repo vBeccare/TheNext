@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllProduct = () => {
+export const getAllProduct = ({ page }) => {
   const token = localStorage.getItem("token");
   let config = {
     headers: {
@@ -8,7 +8,7 @@ export const getAllProduct = () => {
     },
   };
 
-  return axios.get("http://localhost:8080/produtos/all", config);
+  return axios.get(`http://localhost:8080/produtos/all?size=10&page=${page - 1}`, config);
 };
 
 export const getProductByUuid = (id) => {
@@ -34,6 +34,16 @@ export const postProduct = (payload) => {
     payload,
     config
   );
+};
+
+export const updateProduct = (payload) => {
+  const token = localStorage.getItem("token");
+  let config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  return axios.put("http://localhost:8080/produtos/atualizar", payload, config);
 };
 
 export const productUpdateStatus = (payload) => {

@@ -1,8 +1,10 @@
 import Router from "next/router";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const usePagination = () => {
   const route = useRouter();
+  const [pageCount, setPageCount] = useState();
 
   const onChangePage = (page) => {
     const currentPath = route.pathname;
@@ -17,6 +19,8 @@ const usePagination = () => {
 
   return {
     onChangePage,
+    setPageCount,
+    pageCount
   };
 };
 

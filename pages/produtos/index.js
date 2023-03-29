@@ -39,6 +39,7 @@ import { getMoneyMask } from "../../utils/formatters";
 import useFormatters from "./hooks/useFormatters";
 
 const Usuarios = () => {
+  const { onChangePage, setPageCount, pageCount } = usePagination();
   const {
     handleChange,
     createNewProduct,
@@ -59,7 +60,7 @@ const Usuarios = () => {
     nameValidator,
 
     isLoading,
-    updateUser,
+    handleUpdateProduct,
 
     setPriceForm,
     priceForm,
@@ -67,9 +68,7 @@ const Usuarios = () => {
     qtdForm,
     setDescricao,
     descricao,
-  } = useProdutos();
-
-  const { onChangePage } = usePagination();
+  } = useProdutos({ setPageCount });
 
   const { handleInputNumberChange } = useFormatters({
     setPriceForm,
@@ -215,7 +214,7 @@ const Usuarios = () => {
           containerClassName={styles.pagination}
           subContainerClassName={"pages pagination"}
           initialPage={0}
-          pageCount={1}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={onChangePage}
@@ -235,7 +234,7 @@ const Usuarios = () => {
         onClose={onClose}
         nameForm={nameForm}
         setNameForm={setNameForm}
-        updateProduct={updateUser}
+        updateProduct={handleUpdateProduct}
         isAdmin={isAdmin}
         handleInputNumberChange={handleInputNumberChange}
         priceForm={priceForm}
