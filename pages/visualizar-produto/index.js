@@ -1,9 +1,24 @@
 import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import Header from "../../components/Header";
+import ImageViewer from "react-simple-image-viewer";
+
 import useVisualizarProduto from "./hooks/useVisualizarProduto";
 
 const VisualizarProduto = () => {
-  const { nome, descricao, preco } = useVisualizarProduto();
+  const {
+    nome,
+    descricao,
+    preco,
+    images,
+    imagesUrl,
+    imagePrincipal,
+    selectedViewImage,
+    isViewerOpen,
+    currentImage,
+    closeImageViewer,
+    openImageViewer,
+    imagePrincipalId,
+  } = useVisualizarProduto();
 
   return (
     <Flex
@@ -26,8 +41,35 @@ const VisualizarProduto = () => {
             width="450px"
             height="450px"
             cursor="pointer"
-            src="/iphone14.jpg"
+            onClick={() => openImageViewer(imagePrincipalId)}
+            src={imagePrincipal}
           />
+          <Flex marginTop={4} gap={6}>
+            {images.map((image) => {
+              return (
+                <Image
+                  width="80px"
+                  height="80px"
+                  cursor="pointer"
+                  src={image.file}
+                  onClick={() => selectedViewImage(image.id)}
+                />
+              );
+            })}
+          </Flex>
+
+          {isViewerOpen && (
+            <ImageViewer
+              src={imagesUrl}
+              currentIndex={currentImage}
+              disableScroll={false}
+              closeOnClickOutside={true}
+              backgroundStyle={{
+                backgroundColor: "rgba(0,0,0,0.9)",
+              }}
+              onClose={closeImageViewer}
+            />
+          )}
         </Flex>
         <Flex
           marginLeft="16px"

@@ -19,6 +19,7 @@ const imagemProduto = () => {
     handleUpdateImage,
     inputImage,
     handleSetDefault,
+    imagePrincipal,
   } = useImage();
 
   return (
@@ -46,51 +47,54 @@ const imagemProduto = () => {
         templateColumns="repeat(4, 1fr)"
         gap={6}
         overflowX="scroll"
-      >{images.map((file, index) => {
-        return (
-          <Flex flexDirection="column" minWidth={100} marginRight={16}>
-            <Image
-              src={file.file}
-              onClick={() => openImageViewer(index)}
-              boxSize="250px"
-              key={index}
-              alt={file.fileName}
-            />
-            <Flex width="80%">
-              <IconButton
-                onClick={() => handleRemoveImage(file.id)}
-                borderRadius={0}
-                colorScheme={"red"}
-                width="50%"
-                icon={<CloseIcon />}
+      >
+        {images.map((file, index) => {
+          return (
+            <Flex flexDirection="column" minWidth={100} marginRight={16}>
+              <Image
+                src={file.file}
+                onClick={() => openImageViewer(index)}
+                boxSize="250px"
+                key={index}
+                alt={file.fileName}
               />
-              <IconButton
-                onClick={handleSetDefault}
-                borderRadius={0}
-                colorScheme={file.isDefault ? "gray" : "yellow"}
-                width="50%"
-                icon={<StarIcon />}
-              />
+              <Flex width="80%">
+                <IconButton
+                  onClick={() => handleRemoveImage(file.id)}
+                  borderRadius={0}
+                  isDisabled={file.id === imagePrincipal}
+                  colorScheme={"red"}
+                  width="50%"
+                  icon={<CloseIcon />}
+                />
+                <IconButton
+                  onClick={() => handleSetDefault(file.id)}
+                  borderRadius={0}
+                  isDisabled={file.id === imagePrincipal}
+                  colorScheme={"yellow"}
+                  width="50%"
+                  icon={<StarIcon />}
+                />
+              </Flex>
             </Flex>
-          </Flex>
-        );
-      })}
+          );
+        })}
 
-      {isViewerOpen && (
-        <ImageViewer
-          src={imagesUrl}
-          currentIndex={currentImage}
-          disableScroll={false}
-          closeOnClickOutside={true}
-          backgroundStyle={{
-            backgroundColor: "rgba(0,0,0,0.9)",
-          }}
-          onClose={closeImageViewer}
-        />
-      )}
-    </Grid>
-  </Flex>
-);
+        {isViewerOpen && (
+          <ImageViewer
+            src={imagesUrl}
+            currentIndex={currentImage}
+            disableScroll={false}
+            closeOnClickOutside={true}
+            backgroundStyle={{
+              backgroundColor: "rgba(0,0,0,0.9)",
+            }}
+            onClose={closeImageViewer}
+          />
+        )}
+      </Grid>
+    </Flex>
+  );
 };
 
 export default imagemProduto;

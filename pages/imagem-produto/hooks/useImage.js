@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getProductByUuid } from "../../../services/product";
+import { getProductByUuid, updateProduct } from "../../../services/product";
 import { deleteImage, postImage } from "../../../services/image";
 
 const useImage = () => {
@@ -8,16 +8,11 @@ const useImage = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [imagesUrl, setImagesUrl] = useState([]);
-  //  const images = [
-  // 	 "http://placeimg.com/1200/800/nature",
-  // 	 "http://placeimg.com/800/1200/nature",
-  // 	 "http://placeimg.com/1920/1080/nature",
-  // 	 "http://placeimg.com/1500/500/nature",
-  // 	 "http://placeimg.com/1200/800/nature",
-
-  //  ];
+  const [imagePrincipal, setImagePrincipal] = useState();
   const route = useRouter();
   const inputImage = useRef();
+
+  const idProduct = route.query.produto;
 
   const openImageViewer = useCallback((index) => {
     setCurrentImage(index);
@@ -41,14 +36,16 @@ const useImage = () => {
 
       setImagesUrl(imageArrayUrl);
       setImages(imageArray);
+      setImagePrincipal(res.data.imgPrincipal);
     });
   };
 
   const addImage = (file, name) => {
-    const idProduct = route.query.produto;
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
+      if (images.length === 0) {
+      }
       postImage({
         fileName: `prod${idProduct}-${name}`,
         file: reader.result,
@@ -58,7 +55,15 @@ const useImage = () => {
       })
         .then(() => {
           alert("Imagem adicionada com sucesso");
-          getProductImage();
+
+          getProductByUuid({ id: currentQuery }).then((res) => {
+            const newImage = res.data.imagem[0];
+            console.log({ newImage });
+            const payload = { id: idProduct, imgPrincipal: newImage.id };
+            updateProduct(payload).then(() => {
+              getProductImage();
+            });
+          });
         })
         .catch(() => {
           alert("Erro ao adicionar imagem");
@@ -85,7 +90,17 @@ const useImage = () => {
       getProductImage();
     });
   };
-  const handleSetDefault = () => {};
+  const handleSetDefault = (id) => {
+    const payload = { id: idProduct, imgPrincipal: id };
+    updateProduct(payload)
+      .then(() => {
+        alert("Imagem principal atualizada com sucesso");
+        getProductImage();
+      })
+      .catch((err) => {
+        alert("Não foi possível atualizar o produto", err);
+      });
+  };
 
   const handleUpdateImage = (e) => {
     e.preventDefault();
@@ -116,6 +131,7 @@ const useImage = () => {
     handleUpdateImage,
     inputImage,
     handleSetDefault,
+    imagePrincipal,
   };
 };
 

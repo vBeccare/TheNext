@@ -113,7 +113,7 @@ const Usuarios = () => {
         marginTop={10}
       >
         <Input
-          placeholder="Nome produto"
+          placeholder="Busque seu produto"
           maxWidth="400px"
           size="md"
           type="search"

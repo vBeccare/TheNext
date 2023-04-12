@@ -1,5 +1,5 @@
 import { IconButton } from "@chakra-ui/react";
-import { useState, useRef, useEffect,  } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   CheckIcon,
   EditIcon,
@@ -57,18 +57,18 @@ const useUsuarios = ({ setPageCount }) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    if(event.target.value){
-    getProductbyName({name:event.target.value}).then((res) => {
-      setPageCount(res.data.totalPages);
-      setProductList(res.data.content);
-    })
-  }else{
-    getAllProduct({ page }).then((res) => {
-      setPageCount(res.data.totalPages);
-      setProductList(res.data.content);
-    });
-  }
-  } 
+    if (event.target.value) {
+      getProductbyName({ name: event.target.value }).then((res) => {
+        setPageCount(res.data.totalPages);
+        setProductList(res.data.content);
+      });
+    } else {
+      getAllProduct({ page }).then((res) => {
+        setPageCount(res.data.totalPages);
+        setProductList(res.data.content);
+      });
+    }
+  };
 
   const handleChangeStatus = (id) => {
     productUpdateStatus({ id: id }).then(() => {
@@ -78,6 +78,10 @@ const useUsuarios = ({ setPageCount }) => {
         setIsEditOpen(false);
       });
     });
+  };
+
+  const handleUpdateImage = (id) => {
+    Router.push(`/imagem-produto/?produto=${id}`);
   };
 
   const handleVisualizeProduct = (id) => {
@@ -120,6 +124,7 @@ const useUsuarios = ({ setPageCount }) => {
         priceForm.replace("R$ ", "").replace(".", "").replace(",", ".")
       ),
       quantidade: Number(qtdForm),
+      avaliacao: "",
     };
 
     updateProduct(payload)
@@ -176,7 +181,7 @@ const useUsuarios = ({ setPageCount }) => {
           icon={status !== "ativo" ? <CheckIcon /> : <NotAllowedIcon />}
         />
         <IconButton
-          onClick={() => handleChangeStatus(id)}
+          onClick={() => handleUpdateImage(id)}
           marginLeft={4}
           colorScheme={"purple"}
           icon={<AttachmentIcon />}
