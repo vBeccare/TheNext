@@ -1,5 +1,5 @@
 import { IconButton } from "@chakra-ui/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,  } from "react";
 import {
   CheckIcon,
   EditIcon,
@@ -15,6 +15,7 @@ import {
   postProduct,
   productUpdateStatus,
   updateProduct,
+  getProductbyName,
 } from "../../../services/product";
 import { getMoneyMask } from "../../../utils/formatters";
 
@@ -54,13 +55,23 @@ const useUsuarios = ({ setPageCount }) => {
     setIsEditOpen(true);
   };
 
-  const handleChange = (event) => setValue(event.target.value);
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    getProductbyName({name:event.target.value}).then((res) => {
+      setPageCount(res.data.totalPages);
+      setProductList(res.data.content);
+     
+    }).catch(() => {
+      
+    });
+  } 
 
   const handleChangeStatus = (id) => {
     productUpdateStatus({ id: id }).then(() => {
       getAllProduct({ page }).then((res) => {
         setPageCount(res.data.totalPages);
         setProductList(res.data.content);
+        setIsEditOpen(false);
       });
     });
   };

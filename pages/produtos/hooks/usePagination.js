@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const usePagination = () => {
   const route = useRouter();
-  const [pageCount, setPageCount] = useState();
+  const [pageCount, setPageCount, ] = useState();
 
   const onChangePage = (page) => {
     const currentPath = route.pathname;

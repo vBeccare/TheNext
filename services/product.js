@@ -11,6 +11,17 @@ export const getAllProduct = ({ page }) => {
   return axios.get(`http://localhost:8080/produtos/all?size=10&page=${page - 1}`, config);
 };
 
+export const getProductbyName = ({ name, page }) => {
+  const token = localStorage.getItem("token");
+  let config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+
+  return axios.get(`http://localhost:8080/produtos/name/${name}?size=10&page=${page - 1}`, config);
+};
+
 export const getProductByUuid = ({id}) => {
   const token = localStorage.getItem("token");
   let config = {
