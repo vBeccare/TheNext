@@ -23,6 +23,11 @@ import {
   ModalFooter,
   Text,
   Textarea,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import Header from "../../components/Header";
@@ -68,6 +73,8 @@ const Usuarios = () => {
     qtdForm,
     setDescricao,
     descricao,
+    avaliacao,
+    setAvaliacao,
   } = useProdutos({ setPageCount });
 
   const { handleInputNumberChange } = useFormatters({
@@ -243,6 +250,8 @@ const Usuarios = () => {
         setQtdForm={setQtdForm}
         setDescricao={setDescricao}
         descricao={descricao}
+        avaliacao={avaliacao}
+        setAvaliacao={setAvaliacao}
       />
 
       <Modal
@@ -276,6 +285,23 @@ const Usuarios = () => {
                   setDescricao(e.target.value);
                 }}
               />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Avaliação</FormLabel>
+              <NumberInput
+                step={0.5}
+                defaultValue={avaliacao}
+                min={0}
+                max={5}
+                onChange={(value) => setAvaliacao(value)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
             </FormControl>
 
             <FormControl mt={4}>

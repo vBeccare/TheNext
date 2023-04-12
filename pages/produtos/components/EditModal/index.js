@@ -10,6 +10,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Textarea,
 } from "@chakra-ui/react";
 
@@ -28,6 +33,8 @@ const EditModal = ({
   setQtdForm,
   setDescricao,
   descricao,
+  avaliacao,
+  setAvaliacao,
 }) => {
   return (
     <Modal
@@ -60,6 +67,23 @@ const EditModal = ({
               placeholder="Descreva o produto"
               onChange={(e) => setDescricao(e.target.value)}
             />
+          </FormControl>
+
+          <FormControl mt={4}>
+            <FormLabel>Avaliação</FormLabel>
+            <NumberInput
+              step={0.5}
+              defaultValue={avaliacao}
+              min={0}
+              max={5}
+              onChange={(value) => setAvaliacao(value)}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
           </FormControl>
 
           <FormControl mt={4}>

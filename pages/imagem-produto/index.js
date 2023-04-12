@@ -39,6 +39,7 @@ const imagemProduto = () => {
         type="file"
         name="file"
         ref={inputImage}
+        multiple
         onChange={handleUpdateImage}
       />
 
@@ -50,15 +51,16 @@ const imagemProduto = () => {
       >
         {images.map((file, index) => {
           return (
-            <Flex flexDirection="column" minWidth={100} marginRight={16}>
+            <Flex flexDirection="column" minWidth={100} width="100%" marginRight={16}>
               <Image
+              marginX="auto"
                 src={file.file}
                 onClick={() => openImageViewer(index)}
                 boxSize="250px"
                 key={index}
                 alt={file.fileName}
               />
-              <Flex width="80%">
+              <Flex width="100%">
                 <IconButton
                   onClick={() => handleRemoveImage(file.id)}
                   borderRadius={0}

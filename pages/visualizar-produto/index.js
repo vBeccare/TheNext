@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import ImageViewer from "react-simple-image-viewer";
 
 import useVisualizarProduto from "./hooks/useVisualizarProduto";
+import Rating from "../../components/Rating";
 
 const VisualizarProduto = () => {
   const {
@@ -18,6 +19,7 @@ const VisualizarProduto = () => {
     closeImageViewer,
     openImageViewer,
     imagePrincipalId,
+    avaliacao,
   } = useVisualizarProduto();
 
   return (
@@ -40,15 +42,17 @@ const VisualizarProduto = () => {
           <Image
             width="450px"
             height="450px"
+            objectFit="contain"
             cursor="pointer"
             onClick={() => openImageViewer(imagePrincipalId)}
             src={imagePrincipal}
           />
-          <Flex marginTop={4} gap={6}>
+          <Flex marginTop={4} gap={6} maxWidth="450px" overflow="scroll">
             {images.map((image) => {
               return (
                 <Image
                   width="80px"
+                  objectFit="cover"
                   height="80px"
                   cursor="pointer"
                   src={image.file}
@@ -57,25 +61,13 @@ const VisualizarProduto = () => {
               );
             })}
           </Flex>
-
-          {isViewerOpen && (
-            <ImageViewer
-              src={imagesUrl}
-              currentIndex={currentImage}
-              disableScroll={false}
-              closeOnClickOutside={true}
-              backgroundStyle={{
-                backgroundColor: "rgba(0,0,0,0.9)",
-              }}
-              onClose={closeImageViewer}
-            />
-          )}
         </Flex>
         <Flex
           marginLeft="16px"
           padding="32px"
           backgroundColor="#d9d9d9"
           borderRadius="8px"
+          minWidth={450}
           flexDirection="column"
         >
           <Text marginBottom="20px" fontSize={30}>
@@ -84,17 +76,7 @@ const VisualizarProduto = () => {
           <Text maxWidth="700px" fontSize={16}>
             {descricao}
           </Text>
-          <div class="rating">
-            <label>&#9733;</label>
-
-            <label>&#9733;</label>
-
-            <label>&#9733;</label>
-
-            <label>&#9734;</label>
-
-            <label>&#9734;</label>
-          </div>
+          <Rating avaliacao={avaliacao} />
           <Text marginTop="26px" maxWidth="1200px" fontSize={25}>
             {preco}
           </Text>
@@ -102,6 +84,19 @@ const VisualizarProduto = () => {
             Comprar
           </Button>
         </Flex>
+
+        {isViewerOpen && (
+          <ImageViewer
+            src={imagesUrl}
+            currentIndex={currentImage}
+            disableScroll={false}
+            closeOnClickOutside={true}
+            backgroundStyle={{
+              backgroundColor: "rgba(0,0,0,0.8)",
+            }}
+            onClose={closeImageViewer}
+          />
+        )}
       </Flex>
     </Flex>
   );

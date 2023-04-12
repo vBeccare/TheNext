@@ -8,6 +8,7 @@ const useVisualizarProduto = () => {
   const [nome, setNome] = useState();
   const [descricao, setDescricao] = useState();
   const [preco, setPreco] = useState();
+  const [avaliacao, setAvaliacao] = useState();
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [images, setImages] = useState([]);
@@ -41,6 +42,7 @@ const useVisualizarProduto = () => {
         const productInfo = res.data;
         setPreco(getMoneyMask(productInfo.preco, "R$ ", 2));
         setNome(productInfo.name);
+        setAvaliacao(productInfo.avaliacao)
         setDescricao(productInfo.descricao);
         let imageArrayUrl = [];
         let imageArray = [];
@@ -72,6 +74,7 @@ const useVisualizarProduto = () => {
     openImageViewer,
     imagePrincipalId,
     imagesUrl,
+    avaliacao
   };
 };
 

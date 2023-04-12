@@ -94,11 +94,10 @@ const useImage = () => {
     const payload = { id: idProduct, imgPrincipal: id };
     updateProduct(payload)
       .then(() => {
-        alert("Imagem principal atualizada com sucesso");
         getProductImage();
       })
       .catch((err) => {
-        alert("Não foi possível atualizar o produto", err);
+        alert("Não foi possível definir a imagem como principal", err);
       });
   };
 
@@ -106,7 +105,9 @@ const useImage = () => {
     e.preventDefault();
     let files = e.target.files;
     if (files) {
-      addImage(files[0], files[0].name);
+      for (let i = 0; i < files.length; i++) {
+        addImage(files[i], files[i].name);
+      }
     }
   };
 

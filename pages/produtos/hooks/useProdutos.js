@@ -33,6 +33,7 @@ const useUsuarios = ({ setPageCount }) => {
   const [priceForm, setPriceForm] = useState();
   const [qtdForm, setQtdForm] = useState();
   const [descricao, setDescricao] = useState();
+  const [avaliacao, setAvaliacao] = useState(1);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,12 +47,13 @@ const useUsuarios = ({ setPageCount }) => {
     setIsEditOpen(false);
   };
 
-  const openModal = ({ id, name, quantidade, valor, descricao }) => {
+  const openModal = ({ id, name, quantidade, valor, descricao, avaliacao }) => {
     setNameForm(name);
     setIdForm(id);
     setQtdForm(quantidade);
     setPriceForm(getMoneyMask(valor, "R$ ", 2));
     setDescricao(descricao);
+    setAvaliacao(avaliacao)
     setIsEditOpen(true);
   };
 
@@ -92,7 +94,7 @@ const useUsuarios = ({ setPageCount }) => {
     const payload = {
       name: nameForm,
       descricao: descricao,
-      avaliacao: [],
+      avaliacao: parseFloat(avaliacao),
       preco: parseFloat(
         priceForm.replace("R$ ", "").replace(".", "").replace(",", ".")
       ),
@@ -124,7 +126,7 @@ const useUsuarios = ({ setPageCount }) => {
         priceForm.replace("R$ ", "").replace(".", "").replace(",", ".")
       ),
       quantidade: Number(qtdForm),
-      avaliacao: "",
+      avaliacao: parseFloat(avaliacao),
     };
 
     updateProduct(payload)
@@ -252,6 +254,8 @@ const useUsuarios = ({ setPageCount }) => {
     qtdForm,
     setDescricao,
     descricao,
+    setAvaliacao,
+    avaliacao,
   };
 };
 
