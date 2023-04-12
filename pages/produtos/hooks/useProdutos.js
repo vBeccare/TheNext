@@ -57,13 +57,17 @@ const useUsuarios = ({ setPageCount }) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    if(event.target.value){
     getProductbyName({name:event.target.value}).then((res) => {
       setPageCount(res.data.totalPages);
       setProductList(res.data.content);
-     
-    }).catch(() => {
-      
+    })
+  }else{
+    getAllProduct({ page }).then((res) => {
+      setPageCount(res.data.totalPages);
+      setProductList(res.data.content);
     });
+  }
   } 
 
   const handleChangeStatus = (id) => {

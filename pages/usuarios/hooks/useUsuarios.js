@@ -8,7 +8,6 @@ import {
   userSignUp,
   userUpdate,
   userUpdateStatus,
-  getUserbyName,
 } from "../../../services/users";
 import useLocal from "../../../hooks/useLocal";
 
@@ -62,12 +61,7 @@ const useUsuarios = () => {
     setIsEditOpen(true);
   };
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-    getUserbyName({name:event.target.value}).then((data) => {
-      console.log(data)
-    })
-  } 
+  const handleChange = (event) => setValue(event.target.value);
 
   const handleChangeStatus = (email) => {
     userUpdateStatus({ email: email }).then(() => {

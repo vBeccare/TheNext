@@ -38,14 +38,3 @@ export const getAllUsers = () => {
 
   return axios.get("http://localhost:8080/usuarios/all", config);
 };
-
-export const getUserbyName = ({ name, page }) => {
-  const token = localStorage.getItem("token");
-  let config = {
-    headers: {
-      Authorization: token,
-    },
-  };
-
-  return axios.get(`http://localhost:8080/usuarios/name/${name}`, config);
-};
