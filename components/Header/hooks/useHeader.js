@@ -6,6 +6,7 @@ const useHeader = () => {
 
   const isProductPath = routeInfos.pathname === "/produtos";
   const isUserPath = routeInfos.pathname === "/usuarios";
+  const isRequestPath = routeInfos.pathname === "/pedidos";
 
   const handleSignIn = () => {
     Router.push("/");
@@ -16,6 +17,9 @@ const useHeader = () => {
   const handleProducts = () => {
     Router.push("/produtos");
   };
+  const handleRequests = () => {
+    Router.push("/pedidos");
+  };
   const handleHome = () => {
     Router.push("/home");
   };
@@ -24,9 +28,11 @@ const useHeader = () => {
     handleSignIn,
     handleUsers,
     handleProducts,
+    handleRequests,
     handleHome,
 		isProductPath,
-		isUserPath
+		isUserPath,
+    isRequestPath
   };
 };
 

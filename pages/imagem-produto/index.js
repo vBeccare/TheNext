@@ -29,7 +29,7 @@ const imagemProduto = () => {
         onClick={onClickInputImage}
         marginTop={16}
         marginLeft={16}
-        padding={16}
+        padding={8}
         maxWidth="50px"
         colorScheme={"green"}
         icon={<AddIcon />}

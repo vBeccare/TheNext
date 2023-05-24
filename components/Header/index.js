@@ -18,9 +18,11 @@ const Header = () => {
     handleSignIn,
     handleUsers,
     handleProducts,
+    handleRequests,
     handleHome,
     isProductPath,
     isUserPath,
+    isRequestPath
   } = useHeader();
 
   return (
@@ -59,6 +61,15 @@ const Header = () => {
           onClick={handleProducts}
         >
           Produtos
+        </Text>
+        <Text
+          fontWeight={isRequestPath && "bold"}
+          borderBottom={isRequestPath && "1px"}
+          cursor="pointer"
+          color="white"
+          onClick={handleRequests}
+        >
+          Pedidos
         </Text>
       </Box>
       <Box>
